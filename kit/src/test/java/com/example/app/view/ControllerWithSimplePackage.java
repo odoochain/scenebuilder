@@ -1,4 +1,4 @@
-package com;
+package com.example.app.view;
 
 /*
  * Copyright (c) 2017 Gluon and/or its affiliates.

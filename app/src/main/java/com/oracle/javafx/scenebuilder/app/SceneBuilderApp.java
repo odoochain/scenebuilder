@@ -332,7 +332,7 @@ public class SceneBuilderApp extends Application implements AppPlatform.AppNotif
         setApplicationUncaughtExceptionHandler();
 
         try {
-            if (AppPlatform.requestStart(this, getParameters()) == false) {
+            if (!AppPlatform.requestStart(this, getParameters())) {
                 // Start has been denied because another instance is running.
                 Platform.exit();
             }

@@ -1,4 +1,7 @@
 module kit {
+    opens com.oracle.javafx.scenebuilder.kit.util to javafx.fxml;
+    opens com.oracle.javafx.scenebuilder.kit.fxom to javafx.fxml;
+
     requires java.desktop;
     requires java.logging;
     requires java.prefs;

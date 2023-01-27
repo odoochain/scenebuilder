@@ -107,7 +107,7 @@ public abstract class AbstractFxmlWindowController extends AbstractWindowControl
         loader.setLocation(fxmlURL);
         loader.setResources(resources);
         try {
-            setRoot((Region)loader.load());
+            setRoot(loader.load());
             controllerDidLoadFxml();
         } catch (RuntimeException | IOException x) {
             System.out.println("loader.getController()=" + loader.getController());
