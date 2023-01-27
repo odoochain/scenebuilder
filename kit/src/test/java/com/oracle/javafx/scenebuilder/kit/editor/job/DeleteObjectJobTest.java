@@ -37,8 +37,10 @@ import com.oracle.javafx.scenebuilder.kit.editor.EditorController;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -54,7 +56,7 @@ public class DeleteObjectJobTest {
     public void executing_job_deletes_fxom_object() throws Exception {
         var editor = new EditorController();
         editor.setFxmlText(
-                Files.readString(Paths.get(getClass().getResource("basic.fxml").toURI())),
+                Files.readString(Paths.get(Objects.requireNonNull(getClass().getResource("basic.fxml")).toURI())),
                 false
         );
 

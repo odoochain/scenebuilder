@@ -35,6 +35,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +50,10 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 /**
  *
@@ -69,27 +74,38 @@ class GlueLoader implements ContentHandler, ErrorHandler, LexicalHandler {
     
     public void load(String xmlText) throws IOException {
         assert xmlText != null;
-        assert GlueDocument.isEmptyXmlText(xmlText) == false;
+        assert !GlueDocument.isEmptyXmlText(xmlText);
         
-        final Charset utf8 = Charset.forName("UTF-8"); //NOI18N
+        final Charset utf8 = StandardCharsets.UTF_8; //NOI18N
         try (final InputStream is = new ByteArrayInputStream(xmlText.getBytes(utf8))) {
             load(is);
         }
     }
-    
+    /**
+//     * https://github.com/threatsource2023Sec/weblogic/blob/master/com.oracle.weblogic.xml.registry.jar/weblogic/xml/jaxp/RegistryXMLReader.java
+     * @author xiaxiaozheng
+     * @date 08:27 1/27/2023 
+     * @param is
+     **/
     public void load(InputStream is) throws IOException {
         assert currentElement == null;
         assert currentElementDepth == -1;
         assert auxiliaries.isEmpty();
         assert prefixMappings.isEmpty();
-        
+        String name = "http://xml.org/sax/properties/lexical-handler";
+
         try {
-            XMLReader xr = XMLReaderFactory.createXMLReader();
-            xr.setContentHandler(this);
-            xr.setErrorHandler(this);
-            xr.setProperty("http://xml.org/sax/properties/lexical-handler", this); //NOI18N
-            xr.parse(new InputSource(is));
-        } catch(SAXException x) {
+//            XMLReader xr = XMLReaderFactory.createXMLReader();
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+//            factory.setNamespaceAware(true);
+//            factory.setValidating(true);
+            XMLReader localXMLReader = factory.newSAXParser().getXMLReader();
+            localXMLReader.setContentHandler(this);
+            localXMLReader.setErrorHandler(this);
+            localXMLReader.setProperty(name, this); //NOI18N
+            localXMLReader.parse(new InputSource(is));
+            is.close();
+        } catch(SAXException | ParserConfigurationException x) {
             throw new IOException(x);
         }
         

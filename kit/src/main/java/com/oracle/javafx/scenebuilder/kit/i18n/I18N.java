@@ -32,15 +32,21 @@
 package com.oracle.javafx.scenebuilder.kit.i18n;
 
 import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- *
+ * <a href="https://github.com/MenoData/Time4J/issues/786">...</a>
+ * <a href="https://github.com/daocalendar/Time4J/commit/d6ceb400e906f7a29d2bdef36bb3bb6a241e2a8f">...</a>
+ * new resource loading architecture
  */
 public class I18N {
-    
-    private static ResourceBundle bundle;
 
+    private static ResourceBundle bundle;
+    private static final ResourceBundle.Control CONTROL =
+            ResourceBundle.Control.getNoFallbackControl(
+                    ResourceBundle.Control.FORMAT_DEFAULT);
     private static ResourceBundle.Control utf8EncodingControl = new I18NControl();
     
     public static String getString(String key) {
@@ -51,11 +57,26 @@ public class I18N {
         final String pattern = getString(key);
         return MessageFormat.format(pattern, arguments);
     }
-    
+    /**
+     * <a href="https://github.com/edvin/tornadofx/issues/1286">...</a>
+     * @author xiaxiaozheng
+     * @date 06:28 1/27/2023
+     * @return java.util.ResourceBundle
+     **/
     public static synchronized ResourceBundle getBundle() {
         if (bundle == null) {
             final String packageName = I18N.class.getPackage().getName();
-            bundle = ResourceBundle.getBundle(packageName + ".SceneBuilderKit",utf8EncodingControl); //NOI18N
+            try {
+                bundle = ResourceBundle.getBundle(packageName + ".SceneBuilderKit", utf8EncodingControl);
+            } catch (MissingResourceException e) {
+                // Fix for issue of Android refs: https://github.com/nulab/zxcvbn4j/issues/21
+                bundle =ResourceBundle.getBundle(packageName + ".SceneBuilderKit", Locale.getDefault());
+            } catch (UnsupportedOperationException e) {
+                // Fix for issue of JDK 9 refs: https://github.com/nulab/zxcvbn4j/issues/45
+                // ResourceBundle.Control is not supported in named modules.
+                // See https://docs.oracle.com/javase/9/docs/api/java/util/ResourceBundle.html#bundleprovider for more details
+                bundle = ResourceBundle.getBundle("com/oracle/javafx/scenebuilder/kit/i18n/SceneBuilderKit", Locale.ROOT);
+            }
         }
         
         return bundle;
