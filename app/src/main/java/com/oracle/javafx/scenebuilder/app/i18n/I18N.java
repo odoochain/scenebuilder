@@ -32,6 +32,8 @@
 package com.oracle.javafx.scenebuilder.app.i18n;
 
 import java.text.MessageFormat;
+import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import com.oracle.javafx.scenebuilder.kit.i18n.I18NControl;
 
@@ -53,7 +55,18 @@ public class I18N {
     public static synchronized ResourceBundle getBundle() {
         if (bundle == null) {
             final String packageName = I18N.class.getPackage().getName();
-            bundle = ResourceBundle.getBundle(packageName + ".SceneBuilderApp",utf8EncodingControl); //NOI18N
+            try {
+                bundle = ResourceBundle.getBundle(packageName + ".SceneBuilderApp", utf8EncodingControl);
+            } catch (MissingResourceException e) {
+                // Fix for issue of Android refs: https://github.com/nulab/zxcvbn4j/issues/21
+                bundle =ResourceBundle.getBundle(packageName + ".SceneBuilderApp", Locale.getDefault());
+            } catch (UnsupportedOperationException e) {
+                // Fix for issue of JDK 9 refs: https://github.com/nulab/zxcvbn4j/issues/45
+                // ResourceBundle.Control is not supported in named modules.
+                // See https://docs.oracle.com/javase/9/docs/api/java/util/ResourceBundle.html#bundleprovider for more details
+                bundle = ResourceBundle.getBundle("com/oracle/javafx/scenebuilder/app/i18n/SceneBuilderApp", Locale.ROOT);
+            }
+//            bundle = ResourceBundle.getBundle(packageName + ".SceneBuilderApp",utf8EncodingControl); //NOI18N
         }
 
         return bundle;

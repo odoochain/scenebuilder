@@ -61,5 +61,6 @@ module kit {
     exports com.oracle.javafx.scenebuilder.kit.util;
     exports com.oracle.javafx.scenebuilder.kit.util.control.effectpicker;
     exports com.oracle.javafx.scenebuilder.kit.util.control.paintpicker;
+
 //    exports com.oracle.javafx.scenebuilder.kit.editor.job;
 }
