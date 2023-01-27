@@ -42,8 +42,12 @@ import java.util.ResourceBundle;
  * new resource loading architecture
  */
 public class I18N {
-
+    public static final Locale LocaleZhCN = new Locale.Builder().setLanguage("zh").setRegion("CN").build();
+    public static final Locale LocaleEn = new Locale.Builder().setLanguage("en").setRegion("US").build();
+    public static final ResourceBundle BundleZhCN = ResourceBundle.getBundle("bundles/Messages", LocaleZhCN);
+    public static final ResourceBundle BundleEn = ResourceBundle.getBundle("bundles/Messages", LocaleEn);
     private static ResourceBundle bundle;
+    private static final String DEFAULT_BUNDLE_NAME = "com/oracle/javafx/scenebuilder/kit/i18n/SceneBuilderKit";
     private static final ResourceBundle.Control CONTROL =
             ResourceBundle.Control.getNoFallbackControl(
                     ResourceBundle.Control.FORMAT_DEFAULT);
@@ -75,7 +79,7 @@ public class I18N {
                 // Fix for issue of JDK 9 refs: https://github.com/nulab/zxcvbn4j/issues/45
                 // ResourceBundle.Control is not supported in named modules.
                 // See https://docs.oracle.com/javase/9/docs/api/java/util/ResourceBundle.html#bundleprovider for more details
-                bundle = ResourceBundle.getBundle("com/oracle/javafx/scenebuilder/kit/i18n/SceneBuilderKit", Locale.ROOT);
+                bundle = BundleEn;
             }
         }
         

@@ -44,6 +44,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -99,7 +100,7 @@ public abstract class TemplatesBaseWindowController extends AbstractFxmlWindowCo
 
             // this "try" is on a per template basis so that a malformed template doesn't crash valid ones
             try {
-                VBox btnRoot = FXMLLoader.load(TemplatesBaseWindowController.class.getResource("Template.fxml"));
+                VBox btnRoot = FXMLLoader.load(Objects.requireNonNull(TemplatesBaseWindowController.class.getResource("Template.fxml")));
                 var button = (Button) btnRoot.lookup("#button");
                 button.setText(template.getUiName());
                 button.setOnAction(e -> onTemplateChosen.accept(template));
