@@ -3,7 +3,6 @@ module kit {
     requires java.logging;
     requires java.prefs;
     requires java.xml;
-    requires javax.json;
     requires aether.api;
     requires aether.connector.basic;
     requires aether.impl;
@@ -24,6 +23,8 @@ module kit {
     requires org.apache.commons.codec;
     requires org.apache.httpcomponents.httpclient;
     requires plexus.utils;
+    requires javax.json.api;
+    requires org.apache.httpcomponents.httpcore;
 
     exports com.oracle.javafx.scenebuilder.kit;
     exports com.oracle.javafx.scenebuilder.kit.alert;
@@ -60,4 +61,5 @@ module kit {
     exports com.oracle.javafx.scenebuilder.kit.util;
     exports com.oracle.javafx.scenebuilder.kit.util.control.effectpicker;
     exports com.oracle.javafx.scenebuilder.kit.util.control.paintpicker;
+//    exports com.oracle.javafx.scenebuilder.kit.editor.job;
 }
