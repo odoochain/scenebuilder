@@ -40,6 +40,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.ErrorHandler;
@@ -50,6 +53,7 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.XMLReaderFactory;
+//import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -60,8 +64,8 @@ import javax.xml.parsers.SAXParserFactory;
  * 
  */
 class GlueLoader implements ContentHandler, ErrorHandler, LexicalHandler {
-    
-    
+
+
     private final GlueDocument document;
     private GlueElement currentElement;
     private int currentElementDepth = -1;
@@ -79,36 +83,44 @@ class GlueLoader implements ContentHandler, ErrorHandler, LexicalHandler {
         final Charset utf8 = StandardCharsets.UTF_8; //NOI18N
         try (final InputStream is = new ByteArrayInputStream(xmlText.getBytes(utf8))) {
             load(is);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
         }
     }
     /**
-//     * https://github.com/threatsource2023Sec/weblogic/blob/master/com.oracle.weblogic.xml.registry.jar/weblogic/xml/jaxp/RegistryXMLReader.java
+     * https://github.com/threatsource2023Sec/weblogic/blob/master/com.oracle.weblogic.xml.registry.jar/weblogic/xml/jaxp/RegistryXMLReader.java
      * @author xiaxiaozheng
      * @date 08:27 1/27/2023 
-     * @param is
+     * @param is Fixed deprecated XMLReaderFactory.createXMLReader() method.
+     * https://github.com/BrightSpots/rcv/commit/80775f95e61f231436b631dbdcfedbe231f0cd87
+     * <a href="https://github.com/openrocket/openrocket/commit/08b76e0b7e82756f7d9aec39780894a9c3f37d8a">...</a>
+     * <a href="https://github.com/search?q=localXMLReader+setContentHandler&type=code">...</a>
      **/
-    public void load(InputStream is) throws IOException {
+    public void load(InputStream is) throws SAXException {
         assert currentElement == null;
         assert currentElementDepth == -1;
         assert auxiliaries.isEmpty();
         assert prefixMappings.isEmpty();
-        String name = "http://xml.org/sax/properties/lexical-handler";
 
+        String name = "http://xml.org/sax/properties/lexical-handler";
         try {
-//            XMLReader xr = XMLReaderFactory.createXMLReader();
             SAXParserFactory factory = SAXParserFactory.newInstance();
-//            factory.setNamespaceAware(true);
+            factory.setNamespaceAware(true);
 //            factory.setValidating(true);
-            XMLReader localXMLReader = factory.newSAXParser().getXMLReader();
+            SAXParser saxParser = factory.newSAXParser();
+            XMLReader localXMLReader = saxParser.getXMLReader();
+//            ResponseHandler localResponseHandler = new ResponseHandler();
             localXMLReader.setContentHandler(this);
             localXMLReader.setErrorHandler(this);
             localXMLReader.setProperty(name, this); //NOI18N
             localXMLReader.parse(new InputSource(is));
             is.close();
         } catch(SAXException | ParserConfigurationException x) {
-            throw new IOException(x);
+            throw new SAXException(x);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        
+
         assert currentElement == null;
         assert currentElementDepth == -1;
         assert auxiliaries.isEmpty();
@@ -296,4 +308,5 @@ class GlueLoader implements ContentHandler, ErrorHandler, LexicalHandler {
             auxiliaries.add(auxiliary);
         }
     }
+
 }

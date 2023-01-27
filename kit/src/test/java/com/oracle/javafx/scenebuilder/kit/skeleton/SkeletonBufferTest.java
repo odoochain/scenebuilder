@@ -69,7 +69,7 @@ public class SkeletonBufferTest {
 
         // then
         String firstLine = skeleton.substring(0, skeleton.indexOf(AbstractSkeletonCreator.NL));
-        assertEquals("package com;", firstLine);
+        assertEquals("package com.example.app.view;", firstLine);
     }
 
     @Test

@@ -248,7 +248,7 @@ public class SceneBuilderTest {
             }
             // A cell has been found
             if (cell != null) {
-                assert cell.isEmpty() == false;
+                assert !cell.isEmpty();
                 if (cell.isVisible()) {
                     final Object item = cell.getItem();
                     assert item instanceof HierarchyItem;

@@ -49,7 +49,7 @@ public class GlueDocument extends GlueNode {
     
     public GlueDocument(String xmlText) throws IOException {
         assert xmlText != null;
-        if (isEmptyXmlText(xmlText) == false) {
+        if (!isEmptyXmlText(xmlText)) {
             final GlueLoader loader = new GlueLoader(this);
             loader.load(xmlText);
             adjustRootElementIndentation();

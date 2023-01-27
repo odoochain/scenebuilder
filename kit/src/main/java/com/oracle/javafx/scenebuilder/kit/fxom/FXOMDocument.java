@@ -179,7 +179,7 @@ public class FXOMDocument {
     }
 
     public void setSampleDataEnabled(boolean sampleDataEnabled) {
-        assert isUpdateOnGoing() == false;
+        assert !isUpdateOnGoing();
         
         final SampleDataGenerator newSampleDataGenerator;
         if (sampleDataEnabled) {

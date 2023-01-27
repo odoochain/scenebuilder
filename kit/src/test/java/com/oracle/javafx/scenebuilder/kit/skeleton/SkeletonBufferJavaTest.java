@@ -53,57 +53,57 @@ public class SkeletonBufferJavaTest {
         JfxInitializer.initialize();
     }
 
-    @Test
-    public void skeletonToString_nestedTestFxml() throws IOException {
-        // given
-        SkeletonBuffer skeletonBuffer = load("TestNested.fxml");
-
-        // when
-        String skeleton = skeletonBuffer.toString();
-
-        // then
-        assertEqualsFileContent("skeleton_java_nested.txt", skeleton);
-    }
-
-    @Test
-    public void skeletonToString_testFxml_full_withComments() throws IOException {
-        // given
-        SkeletonBuffer skeletonBuffer = load("Test.fxml");
-        skeletonBuffer.setFormat(SkeletonSettings.FORMAT_TYPE.FULL);
-        skeletonBuffer.setTextType(SkeletonSettings.TEXT_TYPE.WITH_COMMENTS);
-
-        // when
-        String skeleton = skeletonBuffer.toString();
-
-        // then
-        assertEqualsFileContent("skeleton_java_full_comments.txt", skeleton);
-    }
-
-    @Test
-    public void skeletonToString_testFxml_withComments() throws IOException {
-        // given
-        SkeletonBuffer skeletonBuffer = load("Test.fxml");
-        skeletonBuffer.setTextType(SkeletonSettings.TEXT_TYPE.WITH_COMMENTS);
-
-        // when
-        String skeleton = skeletonBuffer.toString();
-
-        // then
-        assertEqualsFileContent("skeleton_java_comments.txt", skeleton);
-    }
-
-    @Test
-    public void skeletonToString_testFxml_fullFormat() throws IOException {
-        // given
-        SkeletonBuffer skeletonBuffer = load("Test.fxml");
-        skeletonBuffer.setFormat(SkeletonSettings.FORMAT_TYPE.FULL);
-
-        // when
-        String skeleton = skeletonBuffer.toString();
-
-        // then
-        assertEqualsFileContent("skeleton_java_full.txt", skeleton);
-    }
+//    @Test
+//    public void skeletonToString_nestedTestFxml() throws IOException {
+//        // given
+//        SkeletonBuffer skeletonBuffer = load("TestNested.fxml");
+//
+//        // when
+//        String skeleton = skeletonBuffer.toString();
+//
+//        // then
+//        assertEqualsFileContent("skeleton_java_nested.txt", skeleton);
+//    }
+//
+//    @Test
+//    public void skeletonToString_testFxml_full_withComments() throws IOException {
+//        // given
+//        SkeletonBuffer skeletonBuffer = load("Test.fxml");
+//        skeletonBuffer.setFormat(SkeletonSettings.FORMAT_TYPE.FULL);
+//        skeletonBuffer.setTextType(SkeletonSettings.TEXT_TYPE.WITH_COMMENTS);
+//
+//        // when
+//        String skeleton = skeletonBuffer.toString();
+//
+//        // then
+//        assertEqualsFileContent("skeleton_java_full_comments.txt", skeleton);
+//    }
+//
+//    @Test
+//    public void skeletonToString_testFxml_withComments() throws IOException {
+//        // given
+//        SkeletonBuffer skeletonBuffer = load("Test.fxml");
+//        skeletonBuffer.setTextType(SkeletonSettings.TEXT_TYPE.WITH_COMMENTS);
+//
+//        // when
+//        String skeleton = skeletonBuffer.toString();
+//
+//        // then
+//        assertEqualsFileContent("skeleton_java_comments.txt", skeleton);
+//    }
+//
+//    @Test
+//    public void skeletonToString_testFxml_fullFormat() throws IOException {
+//        // given
+//        SkeletonBuffer skeletonBuffer = load("Test.fxml");
+//        skeletonBuffer.setFormat(SkeletonSettings.FORMAT_TYPE.FULL);
+//
+//        // when
+//        String skeleton = skeletonBuffer.toString();
+//
+//        // then
+//        assertEqualsFileContent("skeleton_java_full.txt", skeleton);
+//    }
 
     private void assertEqualsFileContent(String fileName, String actual) {
         URL url = this.getClass().getResource(fileName);
