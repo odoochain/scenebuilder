@@ -9,4 +9,5 @@ module app {
     requires javafx.graphics;
     requires javafx.web;
     requires kit;
+    exports com.oracle.javafx.scenebuilder.app;
 }
